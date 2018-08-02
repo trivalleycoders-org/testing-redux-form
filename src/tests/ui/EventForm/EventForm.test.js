@@ -60,13 +60,15 @@ describe('EventForm', () => {
 
   it('always render Event title', () => {
     const wrapper = eventForm()
-    expect(wrapper.find('TextFieldRedux')).toHaveLength(1)
+    expect(wrapper.find('textarea').find('[name="title"]')).toHaveLength(1)
   })
 
   describe('when submitting the form', () => {
 
     it('if event title is provided, the form is submitted successfully', () => {
       const wrapper = eventForm()
+      const titleInput = wrapper.find('textarea').find('[name="title"]')
+      titleInput.simulate('change', { target: { value: 'Drone Event'}})
       wrapper.find('form').simulate('submit')
     })
 
