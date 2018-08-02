@@ -10,7 +10,7 @@ import { has } from 'ramda'
 const hasCombinedDateTime = has('combinedDateTime')
 
 const validate = values => {
-  
+
   const errors = {}
   const { category, linkToUrl, organization, /*price, tags,*/ title, venue } = values
   let endDateTime
@@ -44,6 +44,7 @@ const validate = values => {
     errors.combinedDateTime = 'Start date/time and end date/time are the same'
   }
   if (!title) {
+    console.log('chk title')
     errors.title = 'Required'
   }
   if (!venue) {

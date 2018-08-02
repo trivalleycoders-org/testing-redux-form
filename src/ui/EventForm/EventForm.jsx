@@ -20,7 +20,7 @@ import { green } from 'logger'
 const shapeDataOut = (formValues) => {
   return formValues
 }
-class EventForm extends React.Component {
+export class EventForm extends React.Component {
   state = {
     values: '',
   }
@@ -47,6 +47,7 @@ class EventForm extends React.Component {
               fieldLabel='Event title'
               fullWidth
               rows={2}
+              required
             />
           </div>
           <div>
@@ -61,8 +62,7 @@ class EventForm extends React.Component {
             </Button>
           </div>
         </form>
-        <ShowValues values={this.state.values} />
-      </div>
+        </div>
     )
   }
 }
