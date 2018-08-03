@@ -1,13 +1,14 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import {Provider} from 'react-redux'
 import PropTypes from 'prop-types'
 import compose from 'recompose'
 import { SubmissionError } from 'redux-form'
 import { withStyles } from '@material-ui/core/styles'
+import {TextField} from '@material-ui/core'
 
 import configureStore from '../../../store'
-import ConnectedEventForm from '../../../ui/EventForm/EventForm'
+import ConnectedEventForm, {EventForm} from '../../../ui/EventForm/EventForm'
 import TextFieldRedux from '../../../ui/ui-elements/TextFieldRedux'
 import styles from '../../../ui/EventForm/styles'
 import validate from '../../../ui/EventForm/validate'
@@ -15,9 +16,10 @@ import validate from '../../../ui/EventForm/validate'
 describe('EventForm', () => {
 
   let handleSubmit, pristine, reset, submitting
-  let mountedEventForm
+  let mountedEventForm = undefined
   const store = configureStore()
 
+  const printError = (e) => console.log('error on submit', e)
   beforeEach(() => {
     pristine = true
     reset = jest.fn()
@@ -26,13 +28,12 @@ describe('EventForm', () => {
     mountedEventForm = undefined
   })
 
-  const eventForm = () => {
+  const connectedEventForm = () => {
     if (!mountedEventForm) {
       const props = {
         pristine,
         reset,
-        submitting,
-        handleSubmit
+        submitting
       }
 
       const Composer = ({
@@ -54,28 +55,35 @@ describe('EventForm', () => {
   }
 
   it('always renders EventForm correctly', () => {
-    const wrapper = eventForm()
+    const wrapper = connectedEventForm()
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('always render Event title', () => {
-    const wrapper = eventForm()
+  it('always renders Event title', () => {
+    const wrapper = connectedEventForm()
     expect(wrapper.find('textarea').find('[name="title"]')).toHaveLength(1)
   })
 
   describe('when submitting the form', () => {
 
+    beforeEach(() => {
+      mountedEventForm = undefined
+    })
+
+    it('if event title is not provided, it should throw an error', () => {
+      const err = { title: 'Required' }
+      const wrapper = connectedEventForm()
+      wrapper.find('form').simulate('submit')
+      expect(wrapper.find(EventForm).prop('submitSucceeded')).toBe(false)
+      expect(wrapper.find('Form').prop('syncErrors')).toEqual(err)
+    })
+
     it('if event title is provided, the form is submitted successfully', () => {
-      const wrapper = eventForm()
+      const wrapper = connectedEventForm()
       const titleInput = wrapper.find('textarea').find('[name="title"]')
       titleInput.simulate('change', { target: { value: 'Drone Event'}})
       wrapper.find('form').simulate('submit')
+      expect(wrapper.find(EventForm).prop('submitSucceeded')).toBe(true)
     })
-
-    // xit('if event title is not provided, it should throw an error', () => {
-    //   const wrapper = eventForm()
-    //   wrapper.find('form').simulate('submit')
-    // })
-
   })
 })

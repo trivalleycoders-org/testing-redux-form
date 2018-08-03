@@ -7,7 +7,7 @@ import { has } from 'ramda'
 // eslint-disable-next-line
 // import { green } from 'logger'
 
-const hasCombinedDateTime = has('combinedDateTime')
+// const hasCombinedDateTime = has('combinedDateTime')
 
 const validate = values => {
 
@@ -17,12 +17,12 @@ const validate = values => {
   let endDateTime
   let startDateTime
 
-  if (hasCombinedDateTime(values)) {
-    endDateTime = values.combinedDateTime.endDateTime
-    startDateTime = values.combinedDateTime.startDateTime
-  } else {
-    errors.hasCombinedDateTime = 'Must select a date and time'
-  }
+  // if (hasCombinedDateTime(values)) {
+  //   endDateTime = values.combinedDateTime.endDateTime
+  //   startDateTime = values.combinedDateTime.startDateTime
+  // } else {
+  //   errors.hasCombinedDateTime = 'Must select a date and time'
+  // }
 
   // if (!category) {
   //   errors.category = 'Required'
@@ -44,7 +44,7 @@ const validate = values => {
   // if (isEqual(startDateTime, endDateTime)) {
   //   errors.combinedDateTime = 'Start date/time and end date/time are the same'
   // }
-  console.log('title: ', title)
+  //console.log('title: ', title)
   if (!title) {
     // console.log('chk title')
     errors.title = 'Required'
@@ -52,7 +52,7 @@ const validate = values => {
   // if (!venue) {
   //   errors.venue = 'Required'
   // }
-  console.log('errors: ', errors)
+  // console.log('errors: ', errors)
   return errors
 }
 
