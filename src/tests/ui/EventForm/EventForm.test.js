@@ -1,30 +1,24 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import {Provider} from 'react-redux'
 import PropTypes from 'prop-types'
-import compose from 'recompose'
-import { SubmissionError } from 'redux-form'
 import { withStyles } from '@material-ui/core/styles'
-import {TextField} from '@material-ui/core'
 
 import configureStore from '../../../store'
 import ConnectedEventForm, {EventForm} from '../../../ui/EventForm/EventForm'
-import TextFieldRedux from '../../../ui/ui-elements/TextFieldRedux'
 import styles from '../../../ui/EventForm/styles'
-import validate from '../../../ui/EventForm/validate'
 
 describe('EventForm', () => {
 
-  let handleSubmit, pristine, reset, submitting
+  let /*handleSubmit,*/ pristine, reset, submitting
   let mountedEventForm = undefined
   const store = configureStore()
 
-  const printError = (e) => console.log('error on submit', e)
   beforeEach(() => {
     pristine = true
     reset = jest.fn()
     submitting = false
-    handleSubmit = fn => fn
+    /*handleSubmit = fn => fn */
     mountedEventForm = undefined
   })
 
