@@ -10,31 +10,20 @@ import styles from '../../../ui/EventForm/styles'
 
 describe('EventForm', () => {
 
-  let /*handleSubmit,*/ pristine, reset, submitting
   let mountedEventForm = undefined
   const store = configureStore()
 
   beforeEach(() => {
-    pristine = true
-    reset = jest.fn()
-    submitting = false
-    /*handleSubmit = fn => fn */
     mountedEventForm = undefined
   })
 
   const connectedEventForm = () => {
     if (!mountedEventForm) {
-      const props = {
-        pristine,
-        reset,
-        submitting
-      }
-
       const Composer = ({
         classes
       }) => (
           <Provider store={store}>
-            <ConnectedEventForm classes={classes} {...props} />
+            <ConnectedEventForm classes={classes} />
           </Provider>
         )
 
@@ -64,20 +53,25 @@ describe('EventForm', () => {
       mountedEventForm = undefined
     })
 
-    it('if event title is not provided, it should throw an error', () => {
-      const err = { title: 'Required' }
-      const wrapper = connectedEventForm()
-      wrapper.find('form').simulate('submit')
-      expect(wrapper.find(EventForm).prop('submitSucceeded')).toBe(false)
-      expect(wrapper.find('Form').prop('syncErrors')).toEqual(err)
-    })
-
     it('if event title is provided, the form is submitted successfully', () => {
       const wrapper = connectedEventForm()
       const titleInput = wrapper.find('textarea').find('[name="title"]')
       titleInput.simulate('change', { target: { value: 'Drone Event'}})
+      // simulate has be called on the node, otherwise it will not work
       wrapper.find('form').simulate('submit')
       expect(wrapper.find(EventForm).prop('submitSucceeded')).toBe(true)
+      expect(wrapper.find('Form').prop('syncErrors')).toEqual({})
+    })
+
+    it('if event title is not provided, it should throw an error', () => {
+      const err = { title: 'Required' }
+      const wrapper = connectedEventForm()
+      const titleInput = wrapper.find('textarea').find('[name="title"]')
+      titleInput.simulate('change', { target: { value: ''}})
+      wrapper.find('form').simulate('submit')
+      expect(wrapper.find(EventForm).prop('submitSucceeded')).toBe(false)
+      // SyncErrors are on the Form node
+      expect(wrapper.find('Form').prop('syncErrors')).toEqual(err)
     })
   })
 })
